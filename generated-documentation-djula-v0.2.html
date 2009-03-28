@@ -37,9 +37,9 @@
     <h3><a name='variables'></a>Variables</h3>
     <p>Variables look like this: <code><a href='#variables' class='djula-tag'>{{ variable }}<a></code>. When the template engine encounters a variable, it evaluates that variable and replaces it with the result.</p>
     <p>Use a dot (<code>.</code>) to access attributes of a variable or index of a list. <code><a href='#variables' class='djula-tag'>{{ user.name }}<a></code> will be replaced with the <code>name</code> attribute of the <code>user</code> object (<i>Lisp hackers: this is an alist lookup</i>). <code><a href='#variables' class='djula-tag'>{{ users.1 }}<a></code> will be replaced with the first user object of the list <code>users</code>. You can use multiple dots with a variable, so <code><a href='#variables' class='djula-tag'>{{ users.1.name }}<a></code> will be replaced with the <code>name</code> attribute of the first user object of the list <code>users</code>.</p>
-    <p>When designing your templates, the values of variables come from Example Tables linked to the template by <a href='#tag-translation-table' class='djula-tag'>{% translation-table %}<a>
-      tags or directly from <a href='#tag-translation' class='djula-tag'>{% translation %}<a> tags. When your template is deployed in a real web application
-      these "devel" values are replaced with "real" values by the programmers.
+    <p>When designing your templates, the values of variables come from Example Tables linked to the template by <a href='#tag-example-table' class='djula-tag'>{% example-table %}<a>
+      tags or directly from <a href='#tag-example' class='djula-tag'>{% example %}<a> tags. When your template is deployed in a real web application
+      these &quot;devel&quot; values are replaced with &quot;real&quot; values by the programmers.
     </p>
 
 

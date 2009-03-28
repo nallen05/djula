@@ -130,14 +130,14 @@ the file pointed to by `TEMPLATE-PATH' should be filled with Lisp lists that sta
 with the name of a variable [as a lisp keyword] and end with a plist of
 language/value pairs.
 
-So if the translation table \"inter.dictionary.sexp\" contains:
+So if the translation table \"inter.XYZ.sexp\" contains:
 
    (hello english \"Hello\" spanish \"Hola\")
    (good-afternoon english \"Good afternoon\" spanish \"Buenas tardes\")
 
 then the template
 
-   {% translation-table \"/hello.sexp\" $}
+   {% translation-table \"/inter.XYZ.sexp\" $}
    {_hello_}, Jill. {_good-afternoon_}.
 
 will be rendered in English as:
@@ -173,8 +173,8 @@ and in Spanish as
 
    El Foo.
 
-Note: Although there can be nested tags, filters, comments, etc in dictionaries,
-there cannot be in the values of variables inside {% dictionary-value %} tags.
+Note: Although there can be nested tags, filters, comments, etc in translation
+tags, there cannot be variables inside {% translation %} tags.
 
 see also: {% set-language %}, {% show-language %},  {% translation-table %}")
 
@@ -498,7 +498,7 @@ to NIL")
 "prints the name of the language currently being used by the template")
 
 (def-tag-documentation :show-table '(template-path)
-"Output the contents of a given dictionary into the page, html-escaping it first.")
+"Output the contents of a given table into the page, html-escaping it first.")
 
 (def-tag-documentation :ssi '(template-path)
 "Output the contents of a given file into the page.
@@ -530,13 +530,16 @@ used in template tags, you must use the {% templatetag %} tag.
 
 The argument tells which template bit to output:
 
-Argument	Outputs
-openblock	{%
-closeblock	%}
-openvariable	{{
-closevariable	}}
-openbrace	{
-closebrace	}
-opencomment	{#
-closecomment	#}"
+Argument	        Outputs
+openblock	        {%
+closeblock	        %}
+openvariable	        {{
+closevariable	        }}
+openbrace	        {
+closebrace	        }
+opencomment	        {#
+closecomment	        #}
+opentranslationvariable {_
+closetranslationvariable _}
+"
 :from-django-p t)

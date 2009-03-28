@@ -231,10 +231,10 @@ about the variable definitions contained in the translation table indicated by
 						  template-path))
     (if (not (translation-table-p template-path))
 
-	;; it doesn't look like a dictionary, complain
+	;; it doesn't look like a translation table, complain
 	(progn (logv:format-log  "<<<the path ~S is not TRANSLATION-TABLE-P>>>"
 				 template-path)
-	       (f0 (template-error-string "the path ~S does not name a dictionary! the names of dictionaries must match one of the following regular expressions: ~{~S ~}"
+	       (f0 (template-error-string "the path ~S does not name a translation table! the names of translation table must match one of the following regular expressions: ~{~S ~}"
 					  template-path
 					  *translation-table-regexps*)))
 
@@ -266,11 +266,11 @@ list
    (`PATH' . PLIST)
 
 to *KNOWN-EXAMPLE-TABLES* [where PLIST is composed of variable/value pairs], thus letting
-GET-VARIABLES know about the variable definitions contained in the devel dictionary
+GET-VARIABLES know about the variable definitions contained in the example table
 pointed to by `TEMPLATE-PATH'
 
-Note: definitions contained in a devel-dictionary are only visible to the template if
-*USE-EXAMPLE-VALUES-P* is non-NULL. If *USE-EXAMPLE-VALUES-P* is NULL, then the dictionary
+Note: definitions contained in an example table are only visible to the template if
+*USE-EXAMPLE-VALUES-P* is non-NULL. If *USE-EXAMPLE-VALUES-P* is NULL, then the example table
 checks to make sure *TEMPLATE-ARGUMENTS* contains all its variables, complaining if
 it doesn't"
   (with-template-error (f0 (template-error-string "There was an error reading or parsing the contents of the example table ~S"
@@ -288,8 +288,8 @@ it doesn't"
 
 	     (if (not (evenp (length (.read-table it))))
 
-		 ;; it doesn't smell like a dictionary, complain
-		 (progn (logv:format-log "<<<~S does not look like a devel dictionary>>>"
+		 ;; it doesn't smell like an example table, complain
+		 (progn (logv:format-log "<<<~S does not look like an example table>>>"
 					 template-path)
 			(f0 (template-error-string "the example table ~S does not look like an example table!"
 						   template-path)))
@@ -310,7 +310,7 @@ it doesn't"
 				      ""
 				      (.check-example-table-plist plist)))))
 			     
-		     ;; otherwise use the current contents of the dictionary forever
+		     ;; otherwise use the current contents of the table forever
 		     (let ((plist (.read-table it)))
 		       (f0 (push (cons it plist)
 				 *known-example-tables*)
@@ -662,7 +662,7 @@ they compile into a function that simply calls this function with *TEMPLATE-ARGU
 							  sexp)
 		(funcall fn)))))))
 
-; show dictionary
+; show translation/example table
 
 (def-tag-compiler :show-table (path)
   ":SHOW-TABLE tags compile into a function that return the html-escaped contents of
@@ -715,8 +715,8 @@ the file pointed to by the template-path `PATH'"
 		  (:closebrace "}")
 		  (:opencomment "{#")
 		  (:closecomment "#}")
-		  (:opendictionaryvariable "{_")
-		  (:closedictionaryvariable "_}")
+		  (:opentranslationvariable "{_")
+		  (:closetranslationvariable "_}")
 		  (otherwise (template-error-string "Unknown templatetag ~A. known template tags are: openblock, closeblock, openvariable, closevariable, openbrace, closebrace, opencomment, closecomment"
 						    argument)))))
     (constantly string)))

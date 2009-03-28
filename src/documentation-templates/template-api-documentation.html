@@ -15,7 +15,7 @@
 {% block prepend-to-documentation1 %}
 {% endblock %}
 
-{% filter link-tags-to-definitions|link-variables-to-documentation|link-comments-to-documentation|link-dictionary-variables-to-documentation %}
+{% filter link-tags-to-definitions|link-variables-to-documentation|link-comments-to-documentation|link-translation-variables-to-documentation %}
 
     <h2>Djula Documentation Quick Reference</h2>
     <ol>
@@ -23,7 +23,7 @@
       <li><a href='#filters'>Filters</a></li>
       <li><a href='#tags'>Tags</a></li>
       <li><a href='#template-inheritance'>Template Inheritance</a></li>
-      <li><a href='#dictionary-variables'>Dictionary Variables</a></li>
+      <li><a href='#translation-variables'>Translation Variables</a></li>
       <li><a href='#different-from-django'>How Djula is different from the Django templating language</a></li>
     </ol>
 
@@ -37,9 +37,9 @@
     <h3><a name='variables'></a>Variables</h3>
     <p>Variables look like this: <code>{% templatetag openvariable %} variable {% templatetag closevariable%}</code>. When the template engine encounters a variable, it evaluates that variable and replaces it with the result.</p>
     <p>Use a dot (<code>.</code>) to access attributes of a variable or index of a list. <code>{% templatetag openvariable %} user.name {% templatetag closevariable%}</code> will be replaced with the <code>name</code> attribute of the <code>user</code> object (<i>Lisp hackers: this is an alist lookup</i>). <code>{% templatetag openvariable %} users.1 {% templatetag closevariable%}</code> will be replaced with the first user object of the list <code>users</code>. You can use multiple dots with a variable, so <code>{% templatetag openvariable %} users.1.name {% templatetag closevariable%}</code> will be replaced with the <code>name</code> attribute of the first user object of the list <code>users</code>.</p>
-    <p>When designing your templates, the values of variables come from devel-dictionaries linked to the template by {% templatetag openblock %} devel-dictionary {% templatetag closeblock %}
-      tags or directly from {% templatetag openblock %} dictionary-value {% templatetag closeblock %} tags. When your template is deployed in a real web application
-      these "devel" values are replaced with "real" values by the programmers.
+    <p>When designing your templates, the values of variables come from Example Tables linked to the template by {% templatetag openblock %} example-table {% templatetag closeblock %}
+      tags or directly from {% templatetag openblock %} example {% templatetag closeblock %} tags. When your template is deployed in a real web application
+      these &quot;devel&quot; values are replaced with &quot;real&quot; values by the programmers.
     </p>
 
 
@@ -87,7 +87,7 @@
 
     
     <h3><a name='template-inheritance'></a>Template Inheritance</h3>
-    <p>The most powerful - and thus the most complex - part of Djula&rsquo;s template engine is template inheritance. Template inheritance allows you to build a base &quo;skeleton&quo; template that contains all the common elements of your site and defines blocks that child templates can override.</p>
+    <p>The most powerful - and thus the most complex - part of Djula&rsquo;s template engine is template inheritance. Template inheritance allows you to build a base &quot;skeleton&quot; template that contains all the common elements of your site and defines blocks that child templates can override.</p>
 
 <p>It’s easiest to understand template inheritance by starting with an example:</p>
 
@@ -201,16 +201,16 @@
 
 <p>Finally, note that you can’t define multiple <code>{% templatetag openblock %} block {% templatetag closeblock %}</code> tags with the same name in the same template. This limitation exists because a block tag works in “both” directions. That is, a block tag doesn’t just provide a hole to fill — it also defines the content that fills the hole in the parent. If there were two similarly-named {% templatetag openblock %} block {% templatetag closeblock %} tags in a template, that template’s parent wouldn’t know which one of the blocks’ content to use.</p>
 
-    <h3><a name='dictionary-variables'></a>Dictionary Variables</h3>
+    <h3><a name='translation-variables'></a>Translation Variables</h3>
     <p>
-      Dictionary variables look like {% templatetag opendictionaryvariable %}this{% templatetag closedictionaryvariable %}.
-      Dictionary variables are like <a href='#variables'>variables</a> except they are not HTML-escaped, the don't take filters,
-      and they get their values from dictionaries linked to the template by
-      {% templatetag openblock %} dictionary {% templatetag closeblock %} tags or
-      dictionary variables created dicrectly with {% templatetag openblock %} dictionary-value {% templatetag closeblock %} tags.
+      Translation Variables look like {% templatetag opentranslationvariable %}this{% templatetag closetranslationvariable %}.
+      Translation Variables are like <a href='#variables'>variables</a> except they are not HTML-escaped, the don't take filters,
+      and they get their values from Translation Tables linked to the template by
+      {% templatetag openblock %} translation-table {% templatetag closeblock %} tags or
+      from {% templatetag openblock %} translation {% templatetag closeblock %} tags.
     </p>
     <p>
-      Dictionary variables are used for internationaliztion. If the dictionary "/foo.lisp" contains the following definitions:
+      Translation Variables are used for internationalization. If the Translation Table "/foo.lisp" contains the following definitions:
     <p>
 
       <code><pre>
@@ -221,8 +221,8 @@
     <p>Then the following template:</p>
 
       <code><pre>
-	  {% templatetag openblock %} dictionary "/foo.lisp" {% templatetag closeblock %}
-	  {% templatetag opendictionaryvariable %}foo{% templatetag closedictionaryvariable %}... {% templatetag opendictionaryvariable %}bar{% templatetag closedictionaryvariable %}...
+	  {% templatetag openblock %} translation-table "/foo.lisp" {% templatetag closeblock %}
+	  {% templatetag opentranslationvariable %}foo{% templatetag closetranslationvariable %}... {% templatetag opentranslationvariable %}bar{% templatetag closetranslationvariable %}...
       </pre></code>
 
     <p>Will be rendered in English to:</p>
@@ -240,7 +240,7 @@
 	 </pre></code>
 
     <p>
-      Note that dictionary values can have nested <a href='#tags'>tags</a>, <a href='#variables'>variables</a>, <a href='#comments'>comments</a>, etc.
+      Note that translation values can have nested <a href='#tags'>tags</a>, <a href='#variables'>variables</a>, <a href='#comments'>comments</a>, etc.
     </p>
 
     <h3><a name='known-tag-reference'></a>Known Tag Reference</h3>
@@ -276,19 +276,18 @@
       <h3>Big differences</h3>
       <ul>
 	<li>You always have to use double quotes (&quot;) for string literals, you can't use single quote (&#039;)</li>
-	<li>Most tags in Djula only affect the part of the template after (or &quot;below&quot;) the tag. So if you put a {% templatetag openblock %} debug {% templatetag closeblock %} tag at the top of a template and a {% templatetag openblock %} debug {% templatetag closeblock %} at the bottom of a template they might display different information, depending on the tags seen in between them. This means that things that you want to effect your entire template like {% templatetag openblock %} dictionary {% templatetag closeblock %} tags should always be at the top of the document [note: remember to even put dictionary-* tags on top of the {% templatetag openblock %} extends {% templatetag closeblock %} tag]</li>
+	<li>Most tags in Djula only affect the part of the template after (or &quot;below&quot;) the tag. So if you put a {% templatetag openblock %} debug {% templatetag closeblock %} tag at the top of a template and a {% templatetag openblock %} debug {% templatetag closeblock %} at the bottom of a template they might display different information, depending on the tags seen in between them. This means that things that you want to effect your entire template like {% templatetag openblock %} translation-table {% templatetag closeblock %} tags should always be at the top of the document [note: remember to put {% templatetag openblock %} example-table {% templatetag closeblock %} and {% templatetag openblock %} translation-table {% templatetag closeblock %} tags on top of the {% templatetag openblock %} extends {% templatetag closeblock %} tag]</li>
       </ul>
       <h3>New Features</h3>
       <ul>
-	<li>{% templatetag opendictionaryvariable %}dictionary-variables{% templatetag closedictionaryvariable %} let you do easy internationaization.</li>
-	<li>{% templatetag openblock %} devel-dictionary {% templatetag closeblock %} and {% templatetag openblock %} devel-value {% templatetag closeblock %} tags let you fake a running web application while designing the templates. They also serve as a "contract" between the programmer and the designer.</li>
+	<li>{% templatetag opentranslationvariable %}translation-variables{% templatetag closetranslationvariable %} let you do easy internationalization.</li>
+	<li>{% templatetag openblock %} example-table {% templatetag closeblock %} and {% templatetag openblock %} example {% templatetag closeblock %} tags let you fake a running web application while designing the templates. They also serve as a &quot;contract&quot; between the programmer and the designer.</li>
 	<li>The {% templatetag openblock %} lisp {% templatetag closeblock %} tag and the lisp filter let you call lisp directly from templates [although it's better not to, if you can avoid it]</li>
-	<li>The {% templatetag openblock %} rulebook {% templatetag closeblock %} tag enables you to validate the variables used in developing and the variables used in production with the same tests.</li>
       </ul>
       <h3>Missing</h3>
       <ul>
 	<li>A few of the tags and most of the filters are missing simply because the developer hasn't had time to implement them. It's not gauranteed that every single tag and fiter from the Django templating language is going to get ported to Djula, but hopefully we'll get caught up with the important ones soon.</li>
-	<li>The {% templatetag openblock %} url {% templatetag closeblock %} tag is purposefully omitted in favor of the convention of suppliying links to the template as variables or attributes of variables [so fake links can be supplied with {% templatetag openblock %} devel-dictionary {% templatetag closeblock %} and {% templatetag openblock %} devel-value {% templatetag closeblock %}].
+	<li>The {% templatetag openblock %} url {% templatetag closeblock %} tag is purposefully omitted in favor of the convention of suppliying links to the template as variables or attributes of variables [so fake links can be supplied with {% templatetag openblock %} example-table {% templatetag closeblock %} and {% templatetag openblock %} example {% templatetag closeblock %}].
       </ul>
 
       <h4>New Tags</h4>

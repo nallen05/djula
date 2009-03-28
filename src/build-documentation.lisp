@@ -27,8 +27,8 @@
 (def-filter :link-comments-to-documentation (string)
   (cl-ppcre:regex-replace-all "{#([^}]*)#}" string "<a href='#comments' class='djula-tag'>{#\\1#}<\a>"))
 
-(def-filter :link-dictionary-variables-to-documentation (string)
-  (cl-ppcre:regex-replace-all "{_([^}]*)_}" string "<a href='#dictionary-variables' class='djula-tag'>{_\\1_}<\a>"))
+(def-filter :link-translation-variables-to-documentation (string)
+  (cl-ppcre:regex-replace-all "{_([^}]*)_}" string "<a href='#translation-variables' class='djula-tag'>{_\\1_}<\a>"))
 
 ; doit
 
