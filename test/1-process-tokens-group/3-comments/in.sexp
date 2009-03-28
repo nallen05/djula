@@ -1,0 +1,1 @@
+((:string "foo") (:comment "invisible") (:string "bar") (:comment "invisible2") (:string "baz"))

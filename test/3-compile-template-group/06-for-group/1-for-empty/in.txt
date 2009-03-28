@@ -1,0 +1,3 @@
+{% for x in xs %}
+   There should never be an {{x}}!
+{% endfor %}.eof

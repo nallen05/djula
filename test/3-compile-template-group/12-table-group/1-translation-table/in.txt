@@ -1,0 +1,16 @@
+{% translation-table "/inter.test.lisp" %}
+
+{% set-language english %}
+{% show-language %}
+A is: {_ a _}
+B is: {_b_}
+
+{% set-language spanish %}
+{% show-language %}
+A is: {_ a _}
+B is: {_b_}
+
+{% set-language chinese %}
+{% show-language %}
+A is: {_ a _}
+B is: {_b_}.eof

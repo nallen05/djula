@@ -1,0 +1,2 @@
+{% url method1 %}
+{% url method2 a b c %}

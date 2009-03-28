@@ -1,0 +1,1 @@
+variables {{ foo }} {{ bar }}. eof

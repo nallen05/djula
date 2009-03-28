@@ -1,0 +1,3 @@
+{% ifnotequal foo "FOO" %}YES{% endifnotequal %}
+{% ifnotequal foo "BAR" %}NO{% else %}YES{% endifnotequal %}
+{% ifnotequal foo list.foo %}YES{% else %}NO{% endifnotequal %}.eof

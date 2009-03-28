@@ -1,0 +1,3 @@
+before the blocks
+
+b1 content between b2 content.eof

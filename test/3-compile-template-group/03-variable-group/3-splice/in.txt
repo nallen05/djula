@@ -1,0 +1,1 @@
+variables {{foo}} and {{bar}} and {{baz}} and {{buz}}.eof

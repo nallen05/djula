@@ -1,0 +1,1 @@
+((:string "foobarbaz.eof"))

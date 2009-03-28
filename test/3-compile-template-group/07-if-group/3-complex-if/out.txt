@@ -1,0 +1,5 @@
+NOT FOO AND BAR
+
+
+
+FOO OR BAR

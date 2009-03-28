@@ -1,0 +1,3 @@
+{% for x in xs %}
+name: {{x.name}}{% ifchanged x.day %} day: {{x.day}}{% endifchanged %}
+{% endfor %}.eof

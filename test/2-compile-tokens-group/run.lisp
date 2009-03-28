@@ -1,0 +1,1 @@
+djula-test::!run-compile-tokens-test
