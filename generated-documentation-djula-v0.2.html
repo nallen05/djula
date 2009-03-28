@@ -23,7 +23,7 @@
       <li><a href='#filters'>Filters</a></li>
       <li><a href='#tags'>Tags</a></li>
       <li><a href='#template-inheritance'>Template Inheritance</a></li>
-      <li><a href='#dictionary-variables'>Dictionary Variables</a></li>
+      <li><a href='#translation-variables'>Translation Variables</a></li>
       <li><a href='#different-from-django'>How Djula is different from the Django templating language</a></li>
     </ol>
 
@@ -37,8 +37,8 @@
     <h3><a name='variables'></a>Variables</h3>
     <p>Variables look like this: <code><a href='#variables' class='djula-tag'>{{ variable }}<a></code>. When the template engine encounters a variable, it evaluates that variable and replaces it with the result.</p>
     <p>Use a dot (<code>.</code>) to access attributes of a variable or index of a list. <code><a href='#variables' class='djula-tag'>{{ user.name }}<a></code> will be replaced with the <code>name</code> attribute of the <code>user</code> object (<i>Lisp hackers: this is an alist lookup</i>). <code><a href='#variables' class='djula-tag'>{{ users.1 }}<a></code> will be replaced with the first user object of the list <code>users</code>. You can use multiple dots with a variable, so <code><a href='#variables' class='djula-tag'>{{ users.1.name }}<a></code> will be replaced with the <code>name</code> attribute of the first user object of the list <code>users</code>.</p>
-    <p>When designing your templates, the values of variables come from devel-dictionaries linked to the template by <a href='#tag-devel-dictionary' class='djula-tag'>{% devel-dictionary %}<a>
-      tags or directly from <a href='#tag-dictionary-value' class='djula-tag'>{% dictionary-value %}<a> tags. When your template is deployed in a real web application
+    <p>When designing your templates, the values of variables come from Example Tables linked to the template by <a href='#tag-translation-table' class='djula-tag'>{% translation-table %}<a>
+      tags or directly from <a href='#tag-translation' class='djula-tag'>{% translation %}<a> tags. When your template is deployed in a real web application
       these "devel" values are replaced with "real" values by the programmers.
     </p>
 
@@ -181,7 +181,7 @@
 
     
     <h3><a name='template-inheritance'></a>Template Inheritance</h3>
-    <p>The most powerful - and thus the most complex - part of Djula&rsquo;s template engine is template inheritance. Template inheritance allows you to build a base &quo;skeleton&quo; template that contains all the common elements of your site and defines blocks that child templates can override.</p>
+    <p>The most powerful - and thus the most complex - part of Djula&rsquo;s template engine is template inheritance. Template inheritance allows you to build a base &quot;skeleton&quot; template that contains all the common elements of your site and defines blocks that child templates can override.</p>
 
 <p>It’s easiest to understand template inheritance by starting with an example:</p>
 
@@ -295,16 +295,16 @@
 
 <p>Finally, note that you can’t define multiple <code><a href='#tag-block' class='djula-tag'>{% block %}<a></code> tags with the same name in the same template. This limitation exists because a block tag works in “both” directions. That is, a block tag doesn’t just provide a hole to fill — it also defines the content that fills the hole in the parent. If there were two similarly-named <a href='#tag-block' class='djula-tag'>{% block %}<a> tags in a template, that template’s parent wouldn’t know which one of the blocks’ content to use.</p>
 
-    <h3><a name='dictionary-variables'></a>Dictionary Variables</h3>
+    <h3><a name='translation-variables'></a>Translation Variables</h3>
     <p>
-      Dictionary variables look like <a href='#dictionary-variables' class='djula-tag'>{_this_}<a>.
-      Dictionary variables are like <a href='#variables'>variables</a> except they are not HTML-escaped, the don't take filters,
-      and they get their values from dictionaries linked to the template by
-      <a href='#tag-dictionary' class='djula-tag'>{% dictionary %}<a> tags or
-      dictionary variables created dicrectly with <a href='#tag-dictionary-value' class='djula-tag'>{% dictionary-value %}<a> tags.
+      Translation Variables look like <a href='#translation-variables' class='djula-tag'>{_this_}<a>.
+      Translation Variables are like <a href='#variables'>variables</a> except they are not HTML-escaped, the don't take filters,
+      and they get their values from Translation Tables linked to the template by
+      <a href='#tag-translation-table' class='djula-tag'>{% translation-table %}<a> tags or
+      from <a href='#tag-translation' class='djula-tag'>{% translation %}<a> tags.
     </p>
     <p>
-      Dictionary variables are used for internationaliztion. If the dictionary "/foo.lisp" contains the following definitions:
+      Translation Variables are used for internationalization. If the Translation Table "/foo.lisp" contains the following definitions:
     <p>
 
       <code><pre>
@@ -315,8 +315,8 @@
     <p>Then the following template:</p>
 
       <code><pre>
-	  <a href='#tag-dictionary' class='djula-tag'>{% dictionary "/foo.lisp" %}<a>
-	  <a href='#dictionary-variables' class='djula-tag'>{_foo_}<a>... <a href='#dictionary-variables' class='djula-tag'>{_bar_}<a>...
+	  <a href='#tag-translation-table' class='djula-tag'>{% translation-table "/foo.lisp" %}<a>
+	  <a href='#translation-variables' class='djula-tag'>{_foo_}<a>... <a href='#translation-variables' class='djula-tag'>{_bar_}<a>...
       </pre></code>
 
     <p>Will be rendered in English to:</p>
@@ -334,7 +334,7 @@
 	 </pre></code>
 
     <p>
-      Note that dictionary values can have nested <a href='#tags'>tags</a>, <a href='#variables'>variables</a>, <a href='#comments'>comments</a>, etc.
+      Note that translation values can have nested <a href='#tags'>tags</a>, <a href='#variables'>variables</a>, <a href='#comments'>comments</a>, etc.
     </p>
 
     <h3><a name='known-tag-reference'></a>Known Tag Reference</h3>
@@ -845,7 +845,7 @@ to NIL</pre></p>
       
       <li><a name='tag-show-table'></a>
 	<p><pre><b>SHOW-TABLE (TEMPLATE-PATH)</b> <i><a href='#different-from-django'>New, not in Django</a></i></pre><p>
-	<p><pre>Output the contents of a given dictionary into the page, html-escaping it first.</pre></p>
+	<p><pre>Output the contents of a given table into the page, html-escaping it first.</pre></p>
 	
       </li>
       
@@ -882,15 +882,18 @@ used in template tags, you must use the <a href='#tag-templatetag' class='djula-
 
 The argument tells which template bit to output:
 
-Argument	Outputs
-openblock	{%
-closeblock	%}
-openvariable	<a href='#variables' class='djula-tag'>{{
-closevariable	}}<a>
-openbrace	{
-closebrace	}
-opencomment	<a href='#comments' class='djula-tag'>{#
-closecomment	#}<a></pre></p>
+Argument	        Outputs
+openblock	        {%
+closeblock	        %}
+openvariable	        <a href='#variables' class='djula-tag'>{{
+closevariable	        }}<a>
+openbrace	        {
+closebrace	        }
+opencomment	        <a href='#comments' class='djula-tag'>{#
+closecomment	        #}<a>
+opentranslationvariable <a href='#translation-variables' class='djula-tag'>{_
+closetranslationvariable _}<a>
+</pre></p>
 	
       </li>
       
@@ -915,8 +918,8 @@ and in Spanish as
 
    El Foo.
 
-Note: Although there can be nested tags, filters, comments, etc in dictionaries,
-there cannot be in the values of variables inside <a href='#tag-dictionary-value' class='djula-tag'>{% dictionary-value %}<a> tags.
+Note: Although there can be nested tags, filters, comments, etc in translation
+tags, there cannot be variables inside <a href='#tag-translation' class='djula-tag'>{% translation %}<a> tags.
 
 see also: <a href='#tag-set-language' class='djula-tag'>{% set-language %}<a>, <a href='#tag-show-language' class='djula-tag'>{% show-language %}<a>,  <a href='#tag-translation-table' class='djula-tag'>{% translation-table %}<a></pre></p>
 	
@@ -934,15 +937,15 @@ the file pointed to by `TEMPLATE-PATH&#039; should be filled with Lisp lists tha
 with the name of a variable [as a lisp keyword] and end with a plist of
 language/value pairs.
 
-So if the translation table &quot;inter.dictionary.sexp&quot; contains:
+So if the translation table &quot;inter.XYZ.sexp&quot; contains:
 
    (hello english &quot;Hello&quot; spanish &quot;Hola&quot;)
    (good-afternoon english &quot;Good afternoon&quot; spanish &quot;Buenas tardes&quot;)
 
 then the template
 
-   <a href='#tag-translation-table' class='djula-tag'>{% translation-table &quot;/hello.sexp&quot; $}<a>
-   <a href='#dictionary-variables' class='djula-tag'>{_hello_}<a>, Jill. <a href='#dictionary-variables' class='djula-tag'>{_good-afternoon_}<a>.
+   <a href='#tag-translation-table' class='djula-tag'>{% translation-table &quot;/inter.XYZ.sexp&quot; $}<a>
+   <a href='#translation-variables' class='djula-tag'>{_hello_}<a>, Jill. <a href='#translation-variables' class='djula-tag'>{_good-afternoon_}<a>.
 
 will be rendered in English as:
 
@@ -1112,19 +1115,18 @@ If value is &quot;Joel is a slug&quot;, the output will be &quot;JOEL IS A SLUG&
       <h3>Big differences</h3>
       <ul>
 	<li>You always have to use double quotes (&quot;) for string literals, you can't use single quote (&#039;)</li>
-	<li>Most tags in Djula only affect the part of the template after (or &quot;below&quot;) the tag. So if you put a <a href='#tag-debug' class='djula-tag'>{% debug %}<a> tag at the top of a template and a <a href='#tag-debug' class='djula-tag'>{% debug %}<a> at the bottom of a template they might display different information, depending on the tags seen in between them. This means that things that you want to effect your entire template like <a href='#tag-dictionary' class='djula-tag'>{% dictionary %}<a> tags should always be at the top of the document [note: remember to even put dictionary-* tags on top of the <a href='#tag-extends' class='djula-tag'>{% extends %}<a> tag]</li>
+	<li>Most tags in Djula only affect the part of the template after (or &quot;below&quot;) the tag. So if you put a <a href='#tag-debug' class='djula-tag'>{% debug %}<a> tag at the top of a template and a <a href='#tag-debug' class='djula-tag'>{% debug %}<a> at the bottom of a template they might display different information, depending on the tags seen in between them. This means that things that you want to effect your entire template like <a href='#tag-translation-table' class='djula-tag'>{% translation-table %}<a> tags should always be at the top of the document [note: remember to put <a href='#tag-example-table' class='djula-tag'>{% example-table %}<a> and <a href='#tag-translation-table' class='djula-tag'>{% translation-table %}<a> tags on top of the <a href='#tag-extends' class='djula-tag'>{% extends %}<a> tag]</li>
       </ul>
       <h3>New Features</h3>
       <ul>
-	<li><a href='#dictionary-variables' class='djula-tag'>{_dictionary-variables_}<a> let you do easy internationaization.</li>
-	<li><a href='#tag-devel-dictionary' class='djula-tag'>{% devel-dictionary %}<a> and <a href='#tag-devel-value' class='djula-tag'>{% devel-value %}<a> tags let you fake a running web application while designing the templates. They also serve as a "contract" between the programmer and the designer.</li>
+	<li><a href='#translation-variables' class='djula-tag'>{_translation-variables_}<a> let you do easy internationalization.</li>
+	<li><a href='#tag-example-table' class='djula-tag'>{% example-table %}<a> and <a href='#tag-example' class='djula-tag'>{% example %}<a> tags let you fake a running web application while designing the templates. They also serve as a &quot;contract&quot; between the programmer and the designer.</li>
 	<li>The <a href='#tag-lisp' class='djula-tag'>{% lisp %}<a> tag and the lisp filter let you call lisp directly from templates [although it's better not to, if you can avoid it]</li>
-	<li>The <a href='#tag-rulebook' class='djula-tag'>{% rulebook %}<a> tag enables you to validate the variables used in developing and the variables used in production with the same tests.</li>
       </ul>
       <h3>Missing</h3>
       <ul>
 	<li>A few of the tags and most of the filters are missing simply because the developer hasn't had time to implement them. It's not gauranteed that every single tag and fiter from the Django templating language is going to get ported to Djula, but hopefully we'll get caught up with the important ones soon.</li>
-	<li>The <a href='#tag-url' class='djula-tag'>{% url %}<a> tag is purposefully omitted in favor of the convention of suppliying links to the template as variables or attributes of variables [so fake links can be supplied with <a href='#tag-devel-dictionary' class='djula-tag'>{% devel-dictionary %}<a> and <a href='#tag-devel-value' class='djula-tag'>{% devel-value %}<a>].
+	<li>The <a href='#tag-url' class='djula-tag'>{% url %}<a> tag is purposefully omitted in favor of the convention of suppliying links to the template as variables or attributes of variables [so fake links can be supplied with <a href='#tag-example-table' class='djula-tag'>{% example-table %}<a> and <a href='#tag-example' class='djula-tag'>{% example %}<a>].
       </ul>
 
       <h4>New Tags</h4>
